@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mumbai Indians Dashboard · IPL 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --mi-blue:#004BA0;
+  --mi-gold:#D4AF37;
+  --mi-light:#E8F0FA;
+  --mi-dark:#001F4D;
+  --mi-accent:#1A72D9;
+}
+body{font-family:'DM Sans',sans-serif;background:#f0f4fb;color:#1a1a2e}
+.dash{max-width:900px;margin:0 auto;padding:20px}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,var(--mi-dark) 0%,var(--mi-blue) 60%,var(--mi-accent) 100%);border-radius:16px;padding:24px 28px;margin-bottom:16px;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;right:-30px;top:-30px;width:180px;height:180px;border-radius:50%;background:rgba(212,175,55,0.12);pointer-events:none}
+.logo{width:64px;height:64px;border-radius:50%;background:var(--mi-gold);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--mi-dark);flex-shrink:0;letter-spacing:1px;box-shadow:0 4px 16px rgba(212,175,55,0.4)}
+.header-text h1{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;letter-spacing:2px;line-height:1}
+.header-text p{color:rgba(255,255,255,0.7);font-size:13px;margin-top:4px}
+.season-badge{margin-left:auto;background:var(--mi-gold);color:var(--mi-dark);font-family:'Bebas Neue',sans-serif;font-size:18px;padding:6px 16px;border-radius:20px;letter-spacing:1px;flex-shrink:0}
+
+/* TABS */
+.tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.tab{padding:8px 20px;border-radius:20px;border:2px solid var(--mi-blue);background:transparent;color:var(--mi-blue);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s}
+.tab.active,.tab:hover{background:var(--mi-blue);color:#fff}
+
+/* PANELS */
+.panel{display:none}
+.panel.active{display:block}
+
+/* STAT CARDS */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:600px){.stat-row{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:#fff;border-radius:12px;padding:16px;text-align:center;border-bottom:3px solid var(--mi-gold)}
+.stat-card .num{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--mi-blue);line-height:1}
+.stat-card .lbl{font-size:11px;color:#666;margin-top:4px;font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+
+/* POINTS TABLE */
+.table-wrap{background:#fff;border-radius:12px;overflow:hidden;margin-bottom:16px}
+.table-wrap table{width:100%;border-collapse:collapse;font-size:13px}
+.table-wrap th{background:var(--mi-dark);color:#fff;padding:10px 12px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.5px}
+.table-wrap td{padding:10px 12px;border-bottom:1px solid #f0f0f0}
+.table-wrap tr:last-child td{border-bottom:none}
+.table-wrap tr.mi-row{background:#E8F0FA}
+.table-wrap tr.mi-row td{font-weight:600;color:var(--mi-dark)}
+.pos-badge{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:#e0e0e0;color:#333}
+.pos-badge.top{background:var(--mi-gold);color:var(--mi-dark)}
+.nrr-pos{color:#2e7d32;font-weight:600}
+.nrr-neg{color:#c62828;font-weight:600}
+
+/* MATCHES */
+.match-card{background:#fff;border-radius:12px;padding:16px;margin-bottom:10px;border-left:4px solid var(--mi-blue);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.match-card.win{border-left-color:#2e7d32}
+.match-card.loss{border-left-color:#c62828}
+.match-vs{font-weight:600;font-size:14px;color:var(--mi-dark)}
+.match-result{font-size:13px;color:#555;margin-top:2px}
+.match-venue{font-size:12px;color:#888;margin-top:2px}
+.result-badge{padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;flex-shrink:0}
+.result-badge.win{background:#e8f5e9;color:#2e7d32}
+.result-badge.loss{background:#ffebee;color:#c62828}
+.result-badge.upcoming{background:#e3f2fd;color:#1565c0}
+
+/* PLAYERS */
+.players-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.player-card{background:#fff;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.player-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,75,160,0.12)}
+.player-avatar{width:56px;height:56px;border-radius:50%;background:var(--mi-light);display:flex;align-items:center;justify-content:center;margin:0 auto 10px;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--mi-blue);border:2px solid var(--mi-blue)}
+.player-name{font-weight:600;font-size:13px;color:var(--mi-dark)}
+.player-role{font-size:11px;color:#888;margin-top:2px}
+.player-stat{margin-top:8px;font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--mi-accent)}
+.player-stat-lbl{font-size:10px;color:#aaa;letter-spacing:.5px}
+</style>
+</head>
+<body>
+<div class="dash">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">MI</div>
+    <div class="header-text">
+      <h1>Mumbai Indians</h1>
+      <p>Indian Premier League · IPL 2025</p>
+    </div>
+    <div class="season-badge">IPL 2025</div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('overview')">Overview</button>
+    <button class="tab" onclick="showTab('players')">Players</button>
+    <button class="tab" onclick="showTab('matches')">Matches</button>
+    <button class="tab" onclick="showTab('points')">Points Table</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="panel active" id="tab-overview">
+    <div class="stat-row">
+      <div class="stat-card"><div class="num">5</div><div class="lbl">Titles Won</div></div>
+      <div class="stat-card"><div class="num">7</div><div class="lbl">Matches Played</div></div>
+      <div class="stat-card"><div class="num">4</div><div class="lbl">Wins</div></div>
+      <div class="stat-card"><div class="num">+0.42</div><div class="lbl">Net Run Rate</div></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card"><div class="num">196</div><div class="lbl">Highest Score</div></div>
+      <div class="stat-card"><div class="num">142</div><div class="lbl">Lowest Against</div></div>
+      <div class="stat-card"><div class="num">Rohit</div><div class="lbl">Top Scorer</div></div>
+      <div class="stat-card"><div class="num">Bumrah</div><div class="lbl">Top Wicket Taker</div></div>
+    </div>
+    <div style="background:#fff;border-radius:12px;padding:16px">
+      <div style="font-weight:600;font-size:14px;color:var(--mi-dark);margin-bottom:12px">Recent Form</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <span style="width:36px;height:36px;border-radius:50%;background:#2e7d32;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">W</span>
+        <span style="width:36px;height:36px;border-radius:50%;background:#c62828;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">L</span>
+        <span style="width:36px;height:36px;border-radius:50%;background:#2e7d32;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">W</span>
+        <span style="width:36px;height:36px;border-radius:50%;background:#2e7d32;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">W</span>
+        <span style="width:36px;height:36px;border-radius:50%;background:#c62828;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">L</span>
+        <span style="width:36px;height:36px;border-radius:50%;background:#2e7d32;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">W</span>
+        <span style="width:36px;height:36px;border-radius:50%;background:#2e7d32;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">W</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYERS -->
+  <div class="panel" id="tab-players">
+    <div class="players-grid">
+      <div class="player-card">
+        <div class="player-avatar">RS</div>
+        <div class="player-name">Rohit Sharma</div>
+        <div class="player-role">Batsman · Captain</div>
+        <div class="player-stat">312</div>
+        <div class="player-stat-lbl">RUNS THIS SEASON</div>
+      </div>
+      <div class="player-card">
+        <div class="player-avatar">JB</div>
+        <div class="player-name">Jasprit Bumrah</div>
+        <div class="player-role">Bowler</div>
+        <div class="player-stat">14</div>
+        <div class="player-stat-lbl">WICKETS</div>
+      </div>
+      <div class="player-card">
+        <div class="player-avatar">HH</div>
+        <div class="player-name">Hardik Pandya</div>
+        <div class="player-role">All-rounder</div>
+        <div class="player-stat">198</div>
+        <div class="player-stat-lbl">RUNS</div>
+      </div>
+      <div class="player-card">
+        <div class="player-avatar">SK</div>
+        <div class="player-name">Suryakumar Yadav</div>
+        <div class="player-role">Batsman</div>
+        <div class="player-stat">287</div>
+        <div class="player-stat-lbl">RUNS</div>
+      </div>
+      <div class="player-card">
+        <div class="player-avatar">IK</div>
+        <div class="player-name">Ishan Kishan</div>
+        <div class="player-role">Wicket-keeper</div>
+        <div class="player-stat">241</div>
+        <div class="player-stat-lbl">RUNS</div>
+      </div>
+      <div class="player-card">
+        <div class="player-avatar">TD</div>
+        <div class="player-name">Tim David</div>
+        <div class="player-role">Batsman</div>
+        <div class="player-stat">176</div>
+        <div class="player-stat-lbl">RUNS</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATCHES -->
+  <div class="panel" id="tab-matches">
+    <div class="match-card win">
+      <div>
+        <div class="match-vs">MI vs CSK</div>
+        <div class="match-result">MI won by 6 wickets · 185/4 chased 181</div>
+        <div class="match-venue">Wankhede Stadium, Mumbai</div>
+      </div>
+      <span class="result-badge win">WON</span>
+    </div>
+    <div class="match-card loss">
+      <div>
+        <div class="match-vs">RCB vs MI</div>
+        <div class="match-result">MI lost by 8 runs · 172/8 vs 180/6</div>
+        <div class="match-venue">M. Chinnaswamy, Bengaluru</div>
+      </div>
+      <span class="result-badge loss">LOST</span>
+    </div>
+    <div class="match-card win">
+      <div>
+        <div class="match-vs">MI vs KKR</div>
+        <div class="match-result">MI won by 24 runs · 196/5 vs 172</div>
+        <div class="match-venue">Wankhede Stadium, Mumbai</div>
+      </div>
+      <span class="result-badge win">WON</span>
+    </div>
+    <div class="match-card win">
+      <div>
+        <div class="match-vs">MI vs PBKS</div>
+        <div class="match-result">MI won by 5 wickets · 168/5 chased 164</div>
+        <div class="match-venue">Wankhede Stadium, Mumbai</div>
+      </div>
+      <span class="result-badge win">WON</span>
+    </div>
+    <div class="match-card loss">
+      <div>
+        <div class="match-vs">DC vs MI</div>
+        <div class="match-result">MI lost by 3 wickets · 154/7 vs 155/7</div>
+        <div class="match-venue">Arun Jaitley Stadium, Delhi</div>
+      </div>
+      <span class="result-badge loss">LOST</span>
+    </div>
+    <div class="match-card win">
+      <div>
+        <div class="match-vs">MI vs SRH</div>
+        <div class="match-result">MI won by 11 runs · 189/4 vs 178</div>
+        <div class="match-venue">Wankhede Stadium, Mumbai</div>
+      </div>
+      <span class="result-badge win">WON</span>
+    </div>
+    <div class="match-card win">
+      <div>
+        <div class="match-vs">MI vs RR</div>
+        <div class="match-result">MI won by 7 wickets · 171/3 chased 168</div>
+        <div class="match-venue">Wankhede Stadium, Mumbai</div>
+      </div>
+      <span class="result-badge win">WON</span>
+    </div>
+    <div class="match-card" style="border-left-color:#1565c0">
+      <div>
+        <div class="match-vs">GT vs MI</div>
+        <div class="match-result">Narendra Modi Stadium, Ahmedabad</div>
+        <div class="match-venue">Apr 25, 2025 · 7:30 PM IST</div>
+      </div>
+      <span class="result-badge upcoming">UPCOMING</span>
+    </div>
+  </div>
+
+  <!-- POINTS TABLE -->
+  <div class="panel" id="tab-points">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Team</th><th>P</th><th>W</th><th>L</th><th>NRR</th><th>Pts</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="pos-badge top">1</span></td><td>Royal Challengers</td><td>7</td><td>6</td><td>1</td><td class="nrr-pos">+1.12</td><td><strong>12</strong></td></tr>
+          <tr><td><span class="pos-badge top">2</span></td><td>Chennai Super Kings</td><td>7</td><td>5</td><td>2</td><td class="nrr-pos">+0.76</td><td><strong>10</strong></td></tr>
+          <tr><td><span class="pos-badge top">3</span></td><td>Kolkata Knight Riders</td><td>7</td><td>5</td><td>2</td><td class="nrr-pos">+0.54</td><td><strong>10</strong></td></tr>
+          <tr class="mi-row"><td><span class="pos-badge top">4</span></td><td>🔵 Mumbai Indians</td><td>7</td><td>4</td><td>3</td><td class="nrr-pos">+0.42</td><td><strong>8</strong></td></tr>
+          <tr><td><span class="pos-badge">5</span></td><td>Rajasthan Royals</td><td>7</td><td>3</td><td>4</td><td class="nrr-neg">-0.18</td><td><strong>6</strong></td></tr>
+          <tr><td><span class="pos-badge">6</span></td><td>Sunrisers Hyderabad</td><td>7</td><td>3</td><td>4</td><td class="nrr-neg">-0.31</td><td><strong>6</strong></td></tr>
+          <tr><td><span class="pos-badge">7</span></td><td>Punjab Kings</td><td>7</td><td>2</td><td>5</td><td class="nrr-neg">-0.55</td><td><strong>4</strong></td></tr>
+          <tr><td><span class="pos-badge">8</span></td><td>Delhi Capitals</td><td>7</td><td>2</td><td>5</td><td class="nrr-neg">-0.67</td><td><strong>4</strong></td></tr>
+          <tr><td><span class="pos-badge">9</span></td><td>Gujarat Titans</td><td>7</td><td>2</td><td>5</td><td class="nrr-neg">-0.88</td><td><strong>4</strong></td></tr>
+          <tr><td><span class="pos-badge">10</span></td><td>Lucknow Super Giants</td><td>7</td><td>1</td><td>6</td><td class="nrr-neg">-1.24</td><td><strong>2</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<script>
+function showTab(name){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const tabs=['overview','players','matches','points'];
+    t.classList.toggle('active', tabs[i]===name);
+  });
+  document.querySelectorAll('.panel').forEach(p=>{
+    p.classList.toggle('active', p.id==='tab-'+name);
+  });
+}
+</script>
+</body>
+</html>
