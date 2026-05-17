@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Madhuri Beniwal — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: rgba(255,255,255,0.08);
+    --accent: #7c6ff7;
+    --accent2: #a78bfa;
+    --text: #f0f0f5;
+    --muted: #888899;
+    --success: #34d399;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    color: #fff;
+    margin: 0 auto 1.25rem;
+    position: relative;
+  }
+
+  .avatar::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(124,111,247,0.4);
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #fff 40%, var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 1.25rem;
+    line-height: 1.6;
+  }
+
+  .badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    background: var(--surface);
+    letter-spacing: 0.02em;
+  }
+
+  .badge.ai {
+    border-color: rgba(124,111,247,0.3);
+    color: var(--accent2);
+    background: rgba(124,111,247,0.08);
+  }
+
+  /* ── CHAT CARD ── */
+  .chat-card {
+    width: 100%;
+    max-width: 640px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .chat-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 8px var(--success);
+    animation: pulse 2s infinite;
+  }
+
+  .chat-header span {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .chat-header strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .chat-messages {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 280px;
+    max-height: 340px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--surface2) transparent;
+  }
+
+  .msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+
+  .msg.bot {
+    background: var(--surface2);
+    color: var(--text);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  .msg.user {
+    background: linear-gradient(135deg, var(--accent), #6d5ce7);
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+
+  .typing {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: blink 1.2s infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 1.25rem 1rem;
+  }
+
+  .sug {
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(124,111,247,0.3);
+    color: var(--accent2);
+    background: rgba(124,111,247,0.06);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .sug:hover {
+    background: rgba(124,111,247,0.15);
+    border-color: var(--accent);
+  }
+
+  .chat-input {
+    display: flex;
+    gap: 8px;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .chat-input input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .chat-input input:focus {
+    border-color: rgba(124,111,247,0.5);
+  }
+
+  .chat-input input::placeholder { color: var(--muted); }
+
+  .send-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), #6d5ce7);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { opacity: 0.85; }
+
+  .send-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  .footer a {
+    color: var(--accent2);
+    text-decoration: none;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes blink {
+    0%, 80%, 100% { opacity: 0.2; }
+    40% { opacity: 1; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="avatar">MB</div>
+  <h1>Madhuri Beniwal</h1>
+  <p>AI Engineer · Full Stack Developer · Ex-JLL Business Analyst<br>Delhi / Gurgaon, India</p>
+  <div class="badges">
+    <span class="badge">HTML/CSS</span>
+    <span class="badge">JavaScript</span>
+    <span class="badge">Python</span>
+    <span class="badge">MongoDB</span>
+    <span class="badge">SQL</span>
+    <span class="badge">REST APIs</span>
+    <span class="badge">Postman</span>
+    <span class="badge">Git/GitHub</span>
+    <span class="badge">Selenium</span>
+    <span class="badge">Netlify</span>
+    <span class="badge ai">RAG Systems</span>
+    <span class="badge ai">Prompt Engineering</span>
+    <span class="badge ai">MCP Protocol</span>
+    <span class="badge ai">ChromaDB</span>
+    <span class="badge ai">LLM APIs</span>
+  </div>
+</div>
+
+<div class="chat-card">
+  <div class="chat-header">
+    <div class="status-dot"></div>
+    <span><strong>Madhuri's AI</strong> — Ask me anything about her</span>
+  </div>
+
+  <div class="chat-messages" id="msgs">
+    <div class="msg bot">Hi! I'm Madhuri's AI assistant. She's an ECE graduate and former Business Analyst (HDFC Bank + JLL) who is now specializing in AI Engineering. Ask me about her background, projects, or skills!</div>
+  </div>
+
+  <div class="suggestions" id="sugs">
+    <button class="sug" onclick="ask('Tell me about her background')">Her background?</button>
+    <button class="sug" onclick="ask('What projects has she built?')">Her projects?</button>
+    <button class="sug" onclick="ask('Is she good for an AI engineer role?')">AI engineer fit?</button>
+    <button class="sug" onclick="ask('What makes her unique?')">What makes her unique?</button>
+  </div>
+
+  <div class="chat-input">
+    <input id="cin" type="text" placeholder="Ask anything about Madhuri..." onkeydown="if(event.key==='Enter')send()" />
+    <button class="send-btn" onclick="send()" aria-label="Send">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="footer">
+  Built with AI · <a href="https://jllapps.xyz" target="_blank">jllapps.xyz</a> · madhuribeniwal145@gmail.com
+</div>
+
+<script>
+const kb = {
+  background: `Madhuri's journey:\n\nECE BTech from GGSIPU Delhi (2017–2021)\n→ Analyst at HDFC Bank (2023–2024)\n→ Business Analyst at JLL (Jan 2025–present)\n→ Now: AI Engineering & Full Stack Development\n\nShe combines 3+ years of real business experience with growing tech skills — a rare combination most junior candidates don't have.`,
+
+  projects: `Real projects Madhuri has built:\n\n1. MarketSphere Automation Tool — Python + Selenium, built at JLL to auto-migrate property data from Excel into JLL's CRM. Won a Lean Intermediate Certificate.\n\n2. MI IPL Dashboard (jllapps.xyz) — live Mumbai Indians dashboard with real API data, 282 matches, deployed on her own domain via Netlify.\n\n3. RAG Chat System — ChromaDB + LLM APIs, "chat with documents" project.\n\n4. Auto Loan Analytics Dashboard — built at HDFC Bank to track portfolio KPIs.\n\n5. Voice Controlled Robotics Vehicle — final year major project using Arduino + embedded C.`,
+
+  ai: `Yes! Madhuri is actively building in AI:\n\n- RAG systems using ChromaDB\n- LLM APIs (Claude, Gemini)\n- Prompt Engineering & System Prompts\n- MCP (Model Context Protocol)\n- Currently building a full "chat with documents" app\n\nHer business background (JLL, HDFC) means she understands real-world use cases — not just theory.`,
+
+  unique: `Three things make Madhuri stand out:\n\n1. Real business experience — 3+ years at HDFC Bank and JLL. She understands what companies need, not just code.\n\n2. She ships real things — live website on her own domain, automation tool used by real teams at JLL, Lean Certificate winner.\n\n3. AI-first mindset — while most junior devs learn basic JS, Madhuri is building RAG systems and learning MCP protocol. She's ahead of the curve.`,
+
+  skills: `Madhuri's full tech stack:\n\nFrontend: HTML, CSS, JavaScript, DOM\nBackend: MongoDB, SQL, REST APIs, Node.js basics\nAutomation: Python, Selenium, Excel\nAI/ML: RAG, ChromaDB, LLM APIs, Prompt Engineering, MCP\nTools: Postman, Git, GitHub, Netlify, VS Code\nDomain: Real Estate, Banking, Business Analysis`,
+
+  contact: `Madhuri is based in Gurgaon/Delhi, India.\n\nEmail: madhuribeniwal145@gmail.com\nPortfolio: jllapps.xyz\nGitHub: github.com/madhuri-beniwal\n\nShe is open to: AI Engineer, Frontend Developer, Backend Developer, Full Stack Developer roles.`,
+
+  jll: `At JLL, Madhuri:\n\n- Built a Python + Selenium automation tool that reads Excel and auto-fills JLL's MarketSphere CRM — property search, suite creation, rent entry, lease terms\n- Won a Lean Intermediate Certificate for measurable efficiency gains\n- Visualized US office market trends for senior stakeholders using Excel dashboards\n- Active in JLL Tech Society and Sports Community`,
+
+  education: `BTech in ECE (Electronics & Communication Engineering)\nGGSIPU, Delhi — 2017 to 2021\n\nMajor project: Voice Controlled Robotics Vehicle using Arduino and embedded C.\n\nECE gave her strong foundations in logic, communication protocols, and data — which directly applies to web development and AI.`
+};
+
+function getReply(q) {
+  const ql = q.toLowerCase();
+  if (ql.match(/background|story|journey|who|herself|career|path|experience/)) return kb.background;
+  if (ql.match(/project|built|made|portfolio|work|dashboard|rag|selenium|ipl|marketsphere|automation/)) return kb.projects;
+  if (ql.match(/ai|rag|mcp|prompt|llm|engineer|machine|chromadb|artificial/)) return kb.ai;
+  if (ql.match(/unique|different|stand out|special|why hire|better|advantage/)) return kb.unique;
+  if (ql.match(/skill|know|tech|stack|language|css|js|python|mongodb|tool|stack/)) return kb.skills;
+  if (ql.match(/contact|reach|email|available|open|hire|apply|role|position|job/)) return kb.contact;
+  if (ql.match(/jll|business analyst|real estate|marketsphere|lean|certificate/)) return kb.jll;
+  if (ql.match(/education|btech|ece|college|university|degree|ggsipu|study/)) return kb.education;
+  return `Madhuri is an ECE graduate and former Business Analyst (HDFC Bank + JLL) now specializing in AI Engineering. She has built real projects including a Selenium automation tool at JLL, a live IPL dashboard at jllapps.xyz, and RAG systems. Based in Gurgaon — open to AI Engineer, Frontend and Full Stack roles.`;
+}
+
+function addMsg(text, type) {
+  const msgs = document.getElementById('msgs');
+  const div = document.createElement('div');
+  div.className = `msg ${type}`;
+  div.textContent = text;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'typing'; d.id = 'typing';
+  d.innerHTML = '<div class="dot"></div><div class="dot"></div><div class="dot"></div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function ask(q) {
+  document.getElementById('sugs').style.display = 'none';
+  addMsg(q, 'user');
+  showTyping();
+  setTimeout(() => {
+    document.getElementById('typing')?.remove();
+    addMsg(getReply(q), 'bot');
+  }, 800);
+}
+
+function send() {
+  const inp = document.getElementById('cin');
+  const q = inp.value.trim();
+  if (!q) return;
+  inp.value = '';
+  document.getElementById('sugs').style.display = 'none';
+  ask(q);
+}
+</script>
+</body>
+</html>
